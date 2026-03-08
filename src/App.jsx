@@ -692,7 +692,7 @@ function AboutSection() {
               label: "CodeChef",
               value: "2★ · Max 1407 · Top 2826",
               color: "#b17a56",
-              href: "https://codechef.com",
+              href: "https://codechef.com/users/codeblind007",
               logo: (
                 <svg viewBox="0 0 24 24" width="26" height="26">
                   <path
@@ -1099,7 +1099,7 @@ function ProjectsSection() {
             "Tailwind CSS",
             "shadcn/ui",
           ]}
-          link="https://github.com/raghukartik/TripSync"
+          link="https://github.com/codeBlind007/TripSync"
           accent="#00ff9f"
         />
         <ProjectCard
@@ -1333,7 +1333,7 @@ function ContactSection() {
             {
               label: "GitHub",
               value: "github.com/Kartik-Raghuwanshi",
-              href: "https://github.com/raghukartik",
+              href: "https://github.com/codeBlind007",
             },
             {
               label: "Phone",
