@@ -4,6 +4,7 @@ const SERVICE_ID = import.meta.env.VITE_SERVICE_ID;
 const REPLY_TEMPLATE_ID = import.meta.env.VITE_REPLY_TEMPLATE_ID;
 const NOTIFY_TEMPLATE_ID = import.meta.env.VITE_NOTIFY_TEMPLATE_ID;
 const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
+const RESUME_URL = import.meta.env.VITE_RESUME_URL || "/Kartik_s_resume-2.pdf";
 
 const SECTIONS = [
   "home",
@@ -18,8 +19,14 @@ const TERMINAL_LINES = [
   { text: "> Loading Kartik Raghuwanshi...", delay: 400 },
   { text: "> Brute force rejected. Optimal found ✓", delay: 800 },
   { text: "> Backend systems online ✓", delay: 1200 },
-  { text: "> System design modules loaded ✓", delay: 1600 },
   { text: "> Ready.", delay: 2000 },
+];
+
+const HERO_ROLES = [
+  "Full Stack Dev",
+  "DSA Knight 🏅",
+  "Backend Engineer",
+  "CP Enthusiast",
 ];
 
 const NODES = Array.from({ length: 18 }, (_, i) => ({
@@ -123,7 +130,7 @@ function TerminalBoot({ onDone }) {
         }
       }, l.delay);
     });
-  }, []);
+  }, [onDone]);
   return (
     <div
       style={{
@@ -401,21 +408,83 @@ function SectionTitle({ label, title }) {
   );
 }
 
+function ResumeDownloadCard({ compact = false }) {
+  return (
+    <div
+      style={{
+        background: "rgba(0,255,160,0.04)",
+        border: "1px solid rgba(0,255,160,0.2)",
+        borderRadius: 4,
+        padding: compact ? "1rem" : "1.2rem",
+      }}
+    >
+      <div
+        style={{
+          fontFamily: "'Fira Code', monospace",
+          color: "#00ff9f",
+          fontSize: "clamp(10px,2vw,11px)",
+          letterSpacing: 1.6,
+          marginBottom: 10,
+        }}
+      >
+        // RECRUITER QUICK ACTION
+      </div>
+      <div
+        style={{
+          fontFamily: "'Space Grotesk', sans-serif",
+          color: "#fff",
+          fontWeight: 700,
+          fontSize: "clamp(1rem,3.2vw,1.2rem)",
+          marginBottom: 8,
+        }}
+      >
+        Download Resume
+      </div>
+      <p
+        style={{
+          fontFamily: "'DM Sans', sans-serif",
+          color: "rgba(255,255,255,0.62)",
+          fontSize: "clamp(12px,2.3vw,14px)",
+          lineHeight: 1.6,
+          margin: "0 0 14px",
+        }}
+      >
+        Grab a one-page summary of experience, projects, and skills for quick
+        profile review.
+      </p>
+      <a
+        href={RESUME_URL}
+        download
+        style={{
+          display: "inline-block",
+          fontFamily: "'Fira Code', monospace",
+          background: "#00ff9f",
+          color: "#050e0a",
+          padding: "10px 16px",
+          fontSize: "clamp(10px,2.2vw,12px)",
+          fontWeight: 700,
+          letterSpacing: 1,
+          textDecoration: "none",
+          borderRadius: 2,
+        }}
+      >
+        ./download-resume
+      </a>
+    </div>
+  );
+}
+
 function HeroSection() {
   const [typed, setTyped] = useState("");
-  const roles = [
-    "Full Stack Dev",
-    "DSA Knight 🏅",
-    "Backend Engineer",
-    "CP Enthusiast",
-  ];
+  const width = useWindowWidth();
+  const isMobile = width < 768;
   const roleRef = useRef(0);
   const charRef = useRef(0);
   const deletingRef = useRef(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const role = roles[roleRef.current];
+      const role = HERO_ROLES[roleRef.current];
       if (!deletingRef.current) {
         if (charRef.current <= role.length) {
           setTyped(role.slice(0, charRef.current));
@@ -431,7 +500,7 @@ function HeroSection() {
           setTyped(role.slice(0, charRef.current));
         } else {
           deletingRef.current = false;
-          roleRef.current = (roleRef.current + 1) % roles.length;
+          roleRef.current = (roleRef.current + 1) % HERO_ROLES.length;
         }
       }
     }, 80);
@@ -451,145 +520,174 @@ function HeroSection() {
     >
       <div
         style={{
-          maxWidth: 700,
           width: "100%",
-          paddingTop: 80,
-          paddingBottom: 40,
+          display: "grid",
+          gridTemplateColumns: isMobile
+            ? "1fr"
+            : "minmax(0,700px) minmax(260px,1fr)",
+          gap: isMobile ? 0 : "clamp(1.5rem,5vw,5rem)",
+          alignItems: "center",
         }}
       >
         <div
           style={{
-            fontFamily: "'Fira Code', monospace",
-            color: "#00ff9f",
-            fontSize: "clamp(11px,2.5vw,13px)",
-            letterSpacing: 2,
-            marginBottom: 16,
+            maxWidth: 700,
+            width: "100%",
+            paddingTop: 80,
+            paddingBottom: 40,
           }}
         >
-          &gt; Hello, World. I'm
-        </div>
-        <h1
-          style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 900,
-            fontSize: "clamp(2.4rem,9vw,6rem)",
-            color: "#fff",
-            margin: "0 0 0.5rem",
-            lineHeight: 1,
-            letterSpacing: -3,
-          }}
-        >
-          Kartik
-          <br />
-          <span style={{ color: "#00ff9f" }}>Raghuwanshi</span>
-        </h1>
-        <div
-          style={{
-            fontFamily: "'Fira Code', monospace",
-            fontSize: "clamp(0.85rem,3vw,1.4rem)",
-            color: "rgba(255,255,255,0.6)",
-            marginBottom: 24,
-            minHeight: 36,
-          }}
-        >
-          <span style={{ color: "#00ff9f" }}>&gt;</span> {typed}
-          <span style={{ animation: "blink 1s infinite", color: "#00ff9f" }}>
-            |
-          </span>
-        </div>
-        <p
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(13px,2.5vw,16px)",
-            color: "rgba(255,255,255,0.5)",
-            maxWidth: 520,
-            lineHeight: 1.8,
-            marginBottom: 32,
-          }}
-        >
-          B.Tech CS @ IIIT Sri City · Knight @Leetcode · Pupil @Codeforces ·
-          <br /> 2* @Codechef · Crafting scalable backends and clean frontends.
-        </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "clamp(10px,3vw,16px)",
-            flexWrap: "wrap",
-          }}
-        >
-          <a
-            href="#projects"
+          <div
             style={{
               fontFamily: "'Fira Code', monospace",
-              background: "#00ff9f",
-              color: "#050e0a",
-              padding: "clamp(10px,2.5vw,12px) clamp(16px,4vw,28px)",
-              fontSize: "clamp(11px,2.5vw,13px)",
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              border: "none",
-              cursor: "pointer",
-              textDecoration: "none",
-              transition: "all 0.2s",
-            }}
-          >
-            ./view-projects
-          </a>
-          <a
-            href="#contact"
-            style={{
-              fontFamily: "'Fira Code', monospace",
-              background: "transparent",
               color: "#00ff9f",
-              padding: "clamp(10px,2.5vw,12px) clamp(16px,4vw,28px)",
               fontSize: "clamp(11px,2.5vw,13px)",
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              border: "1px solid #00ff9f",
-              cursor: "pointer",
-              textDecoration: "none",
+              letterSpacing: 2,
+              marginBottom: 16,
             }}
           >
-            ./contact-me
-          </a>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "clamp(16px,5vw,24px)",
-            marginTop: "clamp(28px,5vw,48px)",
-            flexWrap: "wrap",
-          }}
-        >
-          {[
-            { label: "700+", sub: "Problems Accepted" },
-            { label: "1875", sub: "Peak Rating" },
-            { label: "2+", sub: "Production Apps" },
-          ].map((s) => (
-            <div key={s.label}>
-              <div
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800,
-                  fontSize: "clamp(1.3rem,5vw,2.2rem)",
-                  color: "#00ff9f",
-                }}
-              >
-                {s.label}
+            &gt; Hello, World. I'm
+          </div>
+          <h1
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 900,
+              fontSize: "clamp(2.4rem,9vw,6rem)",
+              color: "#fff",
+              margin: "0 0 0.5rem",
+              lineHeight: 1,
+              letterSpacing: -3,
+            }}
+          >
+            Kartik
+            <br />
+            <span style={{ color: "#00ff9f" }}>Raghuwanshi</span>
+          </h1>
+          <div
+            style={{
+              fontFamily: "'Fira Code', monospace",
+              fontSize: "clamp(0.85rem,3vw,1.4rem)",
+              color: "rgba(255,255,255,0.6)",
+              marginBottom: 24,
+              minHeight: 36,
+            }}
+          >
+            <span style={{ color: "#00ff9f" }}>&gt;</span> {typed}
+            <span style={{ animation: "blink 1s infinite", color: "#00ff9f" }}>
+              |
+            </span>
+          </div>
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "clamp(13px,2.5vw,16px)",
+              color: "rgba(255,255,255,0.5)",
+              maxWidth: 520,
+              lineHeight: 1.8,
+              marginBottom: 32,
+            }}
+          >
+            B.Tech CS @ IIIT Sri City · Knight @Leetcode · Pupil @Codeforces ·
+            <br /> 2* @Codechef · Crafting scalable backends and clean
+            frontends.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              gap: "clamp(10px,3vw,16px)",
+              flexWrap: "wrap",
+            }}
+          >
+            <a
+              href="#projects"
+              style={{
+                fontFamily: "'Fira Code', monospace",
+                background: "#00ff9f",
+                color: "#050e0a",
+                padding: "clamp(10px,2.5vw,12px) clamp(16px,4vw,28px)",
+                fontSize: "clamp(11px,2.5vw,13px)",
+                fontWeight: 700,
+                letterSpacing: 1.5,
+                border: "none",
+                cursor: "pointer",
+                textDecoration: "none",
+                transition: "all 0.2s",
+              }}
+            >
+              ./view-projects
+            </a>
+            <a
+              href="#contact"
+              style={{
+                fontFamily: "'Fira Code', monospace",
+                background: "transparent",
+                color: "#00ff9f",
+                padding: "clamp(10px,2.5vw,12px) clamp(16px,4vw,28px)",
+                fontSize: "clamp(11px,2.5vw,13px)",
+                fontWeight: 700,
+                letterSpacing: 1.5,
+                border: "1px solid #00ff9f",
+                cursor: "pointer",
+                textDecoration: "none",
+              }}
+            >
+              ./contact-me
+            </a>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              gap: "clamp(16px,5vw,24px)",
+              marginTop: "clamp(28px,5vw,48px)",
+              flexWrap: "wrap",
+            }}
+          >
+            {[
+              { label: "700+", sub: "Problems Accepted" },
+              { label: "1875", sub: "Peak Rating" },
+              { label: "2+", sub: "Production Apps" },
+            ].map((s) => (
+              <div key={s.label}>
+                <div
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontWeight: 800,
+                    fontSize: "clamp(1.3rem,5vw,2.2rem)",
+                    color: "#00ff9f",
+                  }}
+                >
+                  {s.label}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'Fira Code', monospace",
+                    fontSize: "clamp(9px,2vw,10px)",
+                    color: "rgba(255,255,255,0.4)",
+                    letterSpacing: 1,
+                  }}
+                >
+                  {s.sub}
+                </div>
               </div>
-              <div
-                style={{
-                  fontFamily: "'Fira Code', monospace",
-                  fontSize: "clamp(9px,2vw,10px)",
-                  color: "rgba(255,255,255,0.4)",
-                  letterSpacing: 1,
-                }}
-              >
-                {s.sub}
-              </div>
+            ))}
+          </div>
+          {isMobile && (
+            <div style={{ marginTop: 20, maxWidth: 460 }}>
+              <ResumeDownloadCard compact />
             </div>
-          ))}
+          )}
         </div>
+        {!isMobile && (
+          <aside
+            style={{
+              width: "100%",
+              maxWidth: 400,
+              justifySelf: "end",
+            }}
+          >
+            <ResumeDownloadCard />
+          </aside>
+        )}
       </div>
     </section>
   );
@@ -1099,7 +1197,7 @@ function ProjectsSection() {
             "Tailwind CSS",
             "shadcn/ui",
           ]}
-          link="https://github.com/codeBlind007/TripSync"
+          link="https://app.tripsync.codeblind007.dev"
           accent="#00ff9f"
         />
         <ProjectCard
@@ -1268,6 +1366,7 @@ function ContactSection() {
         setStatus("success");
       }
     } catch (err) {
+      console.error(err);
       setStatus("error");
     }
     setLoading(false);
@@ -1404,6 +1503,7 @@ function ContactSection() {
             >
               $ send_message --to="kartik"
             </div>
+
             <input
               name="name"
               value={form.name}
@@ -1540,6 +1640,7 @@ export default function App() {
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html { scroll-behavior: smooth; }
       body { background: #050e0a; color: #fff; overflow-x: hidden; }
+      #root { width: 100%; min-height: 100vh; }
       ::-webkit-scrollbar { width: 4px; }
       ::-webkit-scrollbar-track { background: #050e0a; }
       ::-webkit-scrollbar-thumb { background: #00ff9f44; border-radius: 2px; }
